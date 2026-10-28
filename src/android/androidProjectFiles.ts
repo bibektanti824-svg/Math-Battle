@@ -9,12 +9,79 @@
 
 export interface AndroidFileRecord {
   path: string;
-  category: 'gradle' | 'manifest' | 'kotlin' | 'layout' | 'values' | 'drawable';
+  category: 'gradle' | 'manifest' | 'kotlin' | 'layout' | 'values' | 'drawable' | 'github';
   description: string;
   content: string;
 }
 
 export const ANDROID_PROJECT_FILES: AndroidFileRecord[] = [
+  // 0. GitHub Actions Automated APK Builder (Builds APK automatically in the cloud for phones)
+  {
+    path: '.github/workflows/build_apk.yml',
+    category: 'github',
+    description: 'GitHub Actions workflow to automatically build the installable app-debug.apk in the cloud without a PC',
+    content: `name: Build Math Battle Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Ensure Gradle Wrapper Exists
+        run: |
+          if [ ! -f "gradlew" ]; then
+            gradle wrapper --gradle-version 8.4
+          fi
+          chmod +x gradlew
+
+      - name: Build APK with Gradle
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload Installable APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MathBattle-app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+`,
+  },
+  {
+    path: '.gitignore',
+    category: 'github',
+    description: 'Standard Android Studio .gitignore file',
+    content: `*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+`,
+  },
   // 1. Settings Gradle
   {
     path: 'settings.gradle.kts',

@@ -134,7 +134,7 @@ The app will automatically detect and show your real payment QR code on the Supp
         <div className="w-full lg:w-80 border-r border-slate-800 bg-slate-900/50 flex flex-col overflow-hidden">
           {/* Category Filter Tabs */}
           <div className="p-3 border-b border-slate-800 flex flex-wrap gap-1 text-[11px]">
-            {['all', 'kotlin', 'layout', 'values', 'gradle', 'manifest'].map((cat) => (
+            {['all', 'kotlin', 'layout', 'values', 'gradle', 'github', 'manifest'].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
